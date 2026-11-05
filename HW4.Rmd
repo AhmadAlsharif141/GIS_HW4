@@ -14,8 +14,6 @@ CTRL SHIFT M          shortcut for "%>%" the pipe operator, but it gives "|>"
 library(tidyverse)
 library(sf)
 library(janitor)
-library(countrycode)
-library(tmap)
 ```
 
 ```{r}
