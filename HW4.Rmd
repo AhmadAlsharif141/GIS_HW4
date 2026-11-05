@@ -1,0 +1,54 @@
+---
+title: "Attempt for HW4"
+output: html_document
+date: "2026-10-29"
+---
+
+ALT  -                Shortcut for "<-"
+CTRL ALT I            shortcut for creating R chunks
+CTRL ALT DOWNARROW    shortcut to dup line u have below
+CTRL SHIFT M          shortcut for "%>%" the pipe operator, but it gives "|>"
+
+```{r}
+# Loading my libraries
+library(tidyverse)
+library(sf)
+library(janitor)
+library(countrycode)
+library(tmap)
+```
+
+```{r}
+my_csv <- read.csv("prac4_data/HDR25_Composite_indices_complete_time_series.csv") # CSV Non Spatial Data 
+world_countries <- st_read("prac4_data/World_Countries_(Generalized)_2173680399808997149.geojson") #Spatial Data - Vector
+st_layers("prac4_data/World_Countries_(Generalized)_2173680399808997149.geojson") # meta data about the layers
+
+```
+```{r}
+plot(st_geometry(world_countries)) # Previewing the empty map, could be done in QGIS too))
+```
+```{r}
+world_countries # previewing the geojson file
+```
+```{r}
+my_csv # previewing the non spatial data
+```
+
+```{r}
+clean_csv <- my_csv %>%
+  select(iso3, country, gii_2010, gii_2019) %>%
+  mutate(diff_2019_2010 = gii_2019 - gii_2010) %>%
+  filter(!is.na(diff_2019_2010)) 
+
+clean_csv #previewing the new csv with the selected columns
+```
+
+```{r}
+# performing the join
+
+final_map <- world_countries |> 
+  left_join(clean_csv, by = c("COUNTRY" = "country"))  # by c("geo id" = "csv id")
+
+final_map # Result !!
+```
+
